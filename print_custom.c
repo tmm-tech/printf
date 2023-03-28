@@ -106,3 +106,36 @@ int print_percent(va_list l, flags_t *f)
 	(void)f;
 	return (_putchar('%'));
 }
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+void print_custom(char specifier, void* arg, int field_width, int precision, int flag_zero, int flag_minus);
+
+int main() {
+    char str[] = "hello";
+    printf("Original string: %s\n", str);
+    printf("Reversed string: |%r|\n", str);
+    return 0;
+}
+
+void print_custom(char specifier, void* arg, int field_width, int precision, int flag_zero, int flag_minus) {
+    switch (specifier) {
+        case 'r': {
+            char* str = (char*) arg;
+            int length = strlen(str);
+            char* reversed_str = (char*) malloc((length + 1) * sizeof(char));
+            for (int i = 0; i < length; i++) {
+                reversed_str[length - i - 1] = str[i];
+            }
+            reversed_str[length] = '\0';
+            printf("%s", reversed_str);
+            free(reversed_str);
+            break;
+        }
+        default:
+            printf("Unsupported custom conversion specifier: %c", specifier);
+            break;
+    }
+}
